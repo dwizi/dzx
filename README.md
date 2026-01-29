@@ -5,6 +5,14 @@ Dzx is the open framework for building MCP servers on Dwizi. It standardizes rep
 **Runtime requirements:** Node.js 24+ (ESM-first).
 
 ## Getting Started
+
+**New to dzx?** Start with the [Getting Started Guide](docs/getting-started.md) for a comprehensive introduction covering:
+- Why dzx and when to use it
+- Quick start tutorial
+- Understanding Build vs Dev vs Runtime modes
+- Project structure and common questions
+
+**Quick scaffold:**
 ```bash
 npx create-dzx@latest
 ```
@@ -306,12 +314,13 @@ Before publishing to npm as `@dwizi/dzx`:
 - `pnpm -C packages/dzx publish --access public`
 
 ## Additional Docs
-- `CLI.md` command and flag matrix
-- `ARCHITECTURE.md` design + flow overview
-- `CORE.md` shared core layout
-- `docs/README.md` short, practical docs
-- `tool-manifest.schema.json` build output schema
-- `examples/tool-manifest.json` example manifest
+- `docs/getting-started.md` — **Start here**: comprehensive getting started guide
+- `docs/README.md` — documentation index
+- `CLI.md` — command and flag matrix
+- `ARCHITECTURE.md` — design + flow overview
+- `CORE.md` — shared core layout
+- `tool-manifest.schema.json` — build output schema
+- `examples/tool-manifest.json` — example manifest
 
 ## License
 MIT (see root `LICENSE`).
