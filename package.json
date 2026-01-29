@@ -11,6 +11,10 @@
   "version": "0.1.5",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "bin": {
     "dzx": "dist/cli/dzx.js",
     "create-dzx": "dist/cli/create-dzx.js"
