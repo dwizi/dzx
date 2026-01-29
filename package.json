@@ -15,6 +15,7 @@
     "lint": "pnpm biome:check && pnpm typecheck",
     "prepublishOnly": "pnpm build",
     "publish:dry": "pnpm publish --dry-run",
+    "fix:lockfile": "pnpm install --lockfile-only --ignore-workspace",
     "biome:check": "biome check .",
     "biome:fix": "biome check . --write",
     "biome:lint": "biome lint .",
