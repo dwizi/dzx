@@ -1,0 +1,6 @@
+{
+  "name": "invalid-tool",
+  "version": "0.0.0",
+  "runtime": "node",
+  "entry": "src/server.ts"
+}

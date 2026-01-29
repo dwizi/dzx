@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Testing
+coverage/
+*.log
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.iml

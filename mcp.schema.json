@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dwizi.dev/schemas/mcp.json",
+  "title": "dzx MCP manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version", "runtime", "entry"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-_]*$",
+      "description": "Short slug for the MCP app."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version for the MCP app."
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["node", "deno"],
+      "description": "Runtime used to execute the MCP server."
+    },
+    "entry": {
+      "type": "string",
+      "description": "Relative path to the MCP server entrypoint."
+    },
+    "protocolVersion": {
+      "type": "string",
+      "description": "Optional MCP protocol version override for initialize."
+    },
+    "toolsDir": {
+      "type": "string",
+      "default": "tools",
+      "description": "Directory containing tool source files."
+    },
+    "resourcesDir": {
+      "type": "string",
+      "default": "resources",
+      "description": "Directory containing resource files."
+    },
+    "promptsDir": {
+      "type": "string",
+      "default": "prompts",
+      "description": "Directory containing prompt files."
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "network": {
+          "type": "boolean",
+          "default": false
+        },
+        "filesystem": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "read": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": []
+            },
+            "write": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": []
+            }
+          },
+          "default": { "read": [], "write": [] }
+        }
+      },
+      "default": { "network": false, "filesystem": { "read": [], "write": [] } }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": { "type": "string" },
+        "output": { "type": "string" },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "default": {}
+        }
+      },
+      "dependentRequired": {
+        "command": ["output"]
+      }
+    }
+  }
+}

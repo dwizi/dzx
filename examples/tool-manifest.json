@@ -1,0 +1,46 @@
+{
+  "manifestVersion": "1",
+  "app": {
+    "name": "basic-agent",
+    "version": "0.1.0",
+    "entry": "src/server.ts"
+  },
+  "runtime": "node",
+  "toolFormat": "esm",
+  "tools": [
+    {
+      "name": "hello",
+      "description": "Returns a friendly greeting.",
+      "file": "dist/tools/hello.js",
+      "format": "esm",
+      "inputSchema": {
+        "type": "object",
+        "properties": { "name": { "type": "string" } },
+        "required": ["name"],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": { "greeting": { "type": "string" } },
+        "required": ["greeting"],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "getting-started",
+      "description": "Quick start guide",
+      "file": "resources/getting-started.md",
+      "mediaType": "text/markdown"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "summarize",
+      "description": "Summarize text in 3 bullets",
+      "file": "prompts/summarize.md",
+      "inputs": [{ "name": "text", "type": "string" }]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dwizi.com/schemas/tool-manifest.json",
+  "title": "dzx tool manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifestVersion", "app", "runtime", "tools"],
+  "properties": {
+    "manifestVersion": { "type": "string", "const": "1" },
+    "app": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "entry"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "entry": { "type": "string" }
+      }
+    },
+    "runtime": { "type": "string", "enum": ["node", "deno"] },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "toolFormat": {
+      "type": "string",
+      "enum": ["esm", "cjs", "source"],
+      "default": "source"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "description", "file"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "file": { "type": "string" },
+          "format": { "type": "string", "enum": ["esm", "cjs", "source"] },
+          "inputSchema": { "type": "object" },
+          "outputSchema": { "type": "object" }
+        }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "file"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "file": { "type": "string" },
+          "mediaType": { "type": "string", "default": "text/markdown" }
+        }
+      },
+      "default": []
+    },
+    "prompts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "file"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "file": { "type": "string" },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "type"],
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string" },
+                "description": { "type": "string" }
+              }
+            },
+            "default": []
+          }
+        }
+      },
+      "default": []
+    }
+  }
+}

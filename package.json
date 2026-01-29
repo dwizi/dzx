@@ -1,0 +1,60 @@
+{
+  "name": "@dwizi/dzx",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "dzx": "dist/cli/dzx.js",
+    "create-dzx": "dist/cli/create-dzx.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "test": "pnpm build && node --test tests/*.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "pnpm biome:check && pnpm typecheck",
+    "prepublishOnly": "pnpm build",
+    "publish:dry": "pnpm publish --dry-run",
+    "biome:check": "biome check .",
+    "biome:fix": "biome check . --write",
+    "biome:lint": "biome lint .",
+    "biome:format": "biome format ."
+  },
+  "exports": {
+    "./cli/init": "./dist/cli/init.js",
+    "./runtime": "./dist/runtime/index.js",
+    "./testing": "./dist/testing/index.js",
+    "./schema": "./dist/schema/index.js"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.0.0",
+    "ajv": "^8.17.1",
+    "chokidar": "^5.0.0",
+    "esbuild": "^0.27.2",
+    "json5": "^2.2.3",
+    "preact": "^10.27.2",
+    "preact-render-to-string": "^6.6.1",
+    "ts-pattern": "^5.9.0",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.13",
+    "@types/node": "^25.1.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "files": [
+    "dist/**",
+    "templates/**",
+    "mcp.schema.json",
+    "tool-manifest.schema.json",
+    "README.md",
+    "ARCHITECTURE.md",
+    "docs/**",
+    "CLI.md",
+    "CORE.md"
+  ]
+}

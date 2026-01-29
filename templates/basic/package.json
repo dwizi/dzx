@@ -1,0 +1,17 @@
+{
+  "name": "basic-agent",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "dzx dev",
+    "inspect": "dzx inspect --json",
+    "build": "dzx build --split-tools"
+  },
+  "dependencies": {
+    "@dwizi/dzx": "^0.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
+  }
+}

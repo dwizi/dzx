@@ -1,0 +1,6 @@
+{
+  "name": "build-split",
+  "version": "0.1.0",
+  "runtime": "node",
+  "entry": "src/server.js"
+}

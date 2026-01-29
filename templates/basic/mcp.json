@@ -1,0 +1,13 @@
+{
+  "name": "basic-agent",
+  "version": "0.1.0",
+  "runtime": "node",
+  "entry": "src/server.ts",
+  "toolsDir": "tools",
+  "resourcesDir": "resources",
+  "promptsDir": "prompts",
+  "permissions": {
+    "network": false,
+    "filesystem": { "read": ["./resources", "./prompts"], "write": [] }
+  }
+}

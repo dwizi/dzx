@@ -1,0 +1,6 @@
+{
+  "name": "feature-test",
+  "version": "1.0.0",
+  "runtime": "node",
+  "entry": "src/server.js"
+}
