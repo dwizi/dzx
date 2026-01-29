@@ -1,6 +1,14 @@
 {
   "name": "@dwizi/dzx",
-  "version": "0.1.0",
+  "homepage": "https://dwizi.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dwizi/dzx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dwizi/dzx/issues"
+  },
+  "version": "0.1.1",
   "type": "module",
   "license": "MIT",
   "bin": {
