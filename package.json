@@ -8,7 +8,7 @@
   "bugs": {
     "url": "https://github.com/dwizi/dzx/issues"
   },
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
   "license": "MIT",
   "publishConfig": {
