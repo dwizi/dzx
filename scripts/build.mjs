@@ -4,7 +4,6 @@ const watch = process.argv.includes("--watch");
 
 const entryPoints = {
   "cli/dzx": "src/cli/dzx.ts",
-  "cli/create-dzx": "src/cli/create-dzx.ts",
   "cli/commands": "src/cli/commands.ts",
   "cli/init": "src/cli/init.ts",
   "cli/run-command": "src/cli/run-command.ts",

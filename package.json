@@ -1,6 +1,6 @@
 {
   "name": "@dwizi/dzx",
-  "homepage": "https://dwizi.com",
+  "homepage": "https://dzx.dwizi.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/dwizi/dzx.git"
@@ -16,8 +16,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "bin": {
-    "dzx": "dist/cli/dzx.js",
-    "create-dzx": "dist/cli/create-dzx.js"
+    "dzx": "dist/cli/dzx.js"
   },
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -25,7 +24,8 @@
     "test": "pnpm build && node --test tests/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "pnpm biome:check && pnpm typecheck",
-    "prepublishOnly": "pnpm build",
+    "version:update-templates": "node scripts/update-template-versions.mjs",
+    "prepublishOnly": "pnpm version:update-templates && pnpm build",
     "publish:dry": "pnpm publish --dry-run",
     "fix:lockfile": "pnpm install --lockfile-only --ignore-workspace",
     "biome:check": "biome check .",
