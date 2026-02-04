@@ -171,7 +171,7 @@ Goal: ship a running `@dwizi/dzx` that standardizes MCP apps, provides a clean l
 
 ## Create-dzx (Scaffolding)
 **Command**
-- `npx create-dzx@latest`
+- `npx @dwizi/create-dzx@latest`
 
 **Flow**
 - Prompt for runtime: `node` | `deno`

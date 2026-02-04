@@ -1,8 +1,9 @@
 # Manifest (mcp.json)
 
-`mcp.json` is the source of truth for a dzx MCP repo.
+`mcp.json` is the source of truth for a dzx repo. It declares your app metadata, runtime, entrypoint, discovery locations, permissions, and build settings.
 
 ## Minimal example
+
 ```json
 {
   "name": "weather-tools",
@@ -12,28 +13,100 @@
 }
 ```
 
-## Fields
-- `name` (string, required)
-- `version` (string, required)
-- `runtime` ("node" | "deno", required)
-- `entry` (string, required) — relative path to server entry.
-- `protocolVersion` (string, optional)
-- `toolsDir` (string, optional, default: `tools`)
-- `resourcesDir` (string, optional, default: `resources`)
-- `promptsDir` (string, optional, default: `prompts`)
-- `permissions` (object, optional)
-  - `network` (boolean)
-  - `filesystem.read` (string[])
-  - `filesystem.write` (string[])
-- `build` (object, optional)
-  - `command` (string)
-  - `output` (string)
-  - `env` (record<string, string>)
+## Full example
 
-## Rules
-- `entry` must be a repo-relative path.
+```json
+{
+  "name": "weather-tools",
+  "version": "1.2.0",
+  "runtime": "node",
+  "entry": "src/server.ts",
+  "protocolVersion": "2025-06-18",
+  "toolsDir": "tools",
+  "resourcesDir": "resources",
+  "promptsDir": "prompts",
+  "permissions": {
+    "network": true,
+    "filesystem": {
+      "read": ["./resources", "./prompts"],
+      "write": ["./tmp"]
+    }
+  },
+  "build": {
+    "command": "pnpm run build-assets",
+    "output": "dist",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
+```
+
+## Field reference
+
+### `name` (required)
+
+A short slug for the MCP app.
+- Pattern: `^[a-z][a-z0-9-_]*$`
+- Example: `weather-tools`
+
+### `version` (required)
+
+Semantic version for the MCP app. Used in the build manifest and gateway import.
+
+### `runtime` (required)
+
+Execution runtime for the server.
+- `node`
+- `deno`
+
+### `entry` (required)
+
+Repo-relative path to your server entrypoint (usually `src/server.ts`).
+
+### `protocolVersion` (optional)
+
+Override the MCP protocol version returned by `initialize`. Use this if your client expects a specific version string.
+
+### `toolsDir`, `resourcesDir`, `promptsDir` (optional)
+
+Customize discovery directories. Defaults:
+- `toolsDir`: `tools`
+- `resourcesDir`: `resources`
+- `promptsDir`: `prompts`
+
+Paths are repo-relative.
+
+### `permissions` (optional)
+
+Describes what the runtime is allowed to do.
+
+Fields:
+- `network` (boolean) -- allow outbound network access.
+- `filesystem.read` (string[]) -- read allowlist.
+- `filesystem.write` (string[]) -- write allowlist.
+
+Defaults to no network access and empty filesystem lists.
+
+### `build` (optional)
+
+Configure the build step and output folder.
+
+Fields:
+- `command` (string) -- shell command to run before bundling.
+- `output` (string) -- output folder (required if `command` is set).
+- `env` (object) -- environment variable overrides for the build command.
+
+You can also override the output folder with `dzx build --out-dir`.
+
+## Rules and validation
+
+`dzx validate` and `dzx build` enforce these rules:
+- `entry` must be a repo-relative path that exists.
+- `runtime` must be `node` or `deno`.
+- `toolsDir`, `resourcesDir`, `promptsDir` must be repo-relative paths.
 - If `build.command` is provided, `build.output` must also be provided.
-- Optional directories must be repo-relative.
 
-## JSON Schema
-See `mcp.schema.json` for the full schema.
+## JSON schema
+
+The full schema lives at `packages/dzx/mcp.schema.json`.

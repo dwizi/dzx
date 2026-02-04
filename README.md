@@ -14,7 +14,7 @@ Dzx is the open framework for building MCP servers on Dwizi. It standardizes rep
 
 **Quick scaffold:**
 ```bash
-npx create-dzx@latest
+npx @dwizi/create-dzx@latest
 ```
 
 `create-dzx` is an alias of `dzx init` (scaffold mode) so the entire setup ships from the same codebase.
@@ -296,7 +296,7 @@ Scaffolds a new MCP repo with a template.
 
 Example:
 ```bash
-npx create-dzx@latest --template basic
+npx @dwizi/create-dzx@latest --template basic
 ```
 
 By default it installs dependencies. Use `--no-install` to skip.

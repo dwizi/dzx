@@ -171,4 +171,4 @@ Current implementation notes:
 
 ## Scaffolding
 - `create-dzx` is an alias of `dzx init` in scaffold mode.
-- `npx create-dzx@latest` prompts for runtime + template and creates a new directory.
+- `npx @dwizi/create-dzx@latest` prompts for runtime + template and creates a new directory.
