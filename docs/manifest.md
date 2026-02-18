@@ -21,7 +21,14 @@
   "version": "1.2.0",
   "runtime": "node",
   "entry": "src/server.ts",
-  "protocolVersion": "2025-06-18",
+  "protocolVersion": "2025-11-25",
+  "mcp": {
+    "methods": {
+      "resourcesTemplatesList": true,
+      "completionComplete": true,
+      "notificationsComplete": true
+    }
+  },
   "toolsDir": "tools",
   "resourcesDir": "resources",
   "promptsDir": "prompts",
@@ -67,6 +74,15 @@ Repo-relative path to your server entrypoint (usually `src/server.ts`).
 ### `protocolVersion` (optional)
 
 Override the MCP protocol version returned by `initialize`. Use this if your client expects a specific version string.
+
+### `mcp.methods` (optional)
+
+Opt-in flags for additional MCP methods.
+
+Fields:
+- `resourcesTemplatesList` (boolean) -- enables `resources/templates/list` and returns `{ "resourceTemplates": [] }`.
+- `completionComplete` (boolean) -- enables `completion/complete` and returns `{ "completion": { "values": [], "hasMore": false } }`.
+- `notificationsComplete` (boolean) -- accepts `notifications/complete` as a no-op notification.
 
 ### `toolsDir`, `resourcesDir`, `promptsDir` (optional)
 

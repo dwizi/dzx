@@ -1,0 +1,13 @@
+{
+  "name": "mcp-optional-methods",
+  "version": "1.0.0",
+  "runtime": "node",
+  "entry": "src/server.js",
+  "mcp": {
+    "methods": {
+      "resourcesTemplatesList": true,
+      "completionComplete": true,
+      "notificationsComplete": true
+    }
+  }
+}

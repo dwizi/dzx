@@ -20,14 +20,14 @@ import { parseFrontmatter } from "../core/frontmatter.js";
 import { loadManifest, normalizeManifest } from "../core/manifest.js";
 import { getDzxVersion } from "../shared/version.js";
 
-const DEFAULT_PROTOCOL_VERSION = "2025-06-18";
+const DEFAULT_PROTOCOL_VERSION = "2025-11-25";
 const DEFAULT_TOOL_TIMEOUT_MS = 30_000;
 
 type AjvInstance = import("ajv").default;
 type AjvConstructor = new (options?: AjvOptions) => AjvInstance;
 const AjvCtor =
   (Ajv as unknown as { default?: AjvConstructor }).default ?? (Ajv as unknown as AjvConstructor);
-const ajv = new AjvCtor({ allErrors: true, strict: false });
+const ajv = new AjvCtor({ allErrors: true, strict: true, allowUnionTypes: true });
 const schemaCache = new Map<string, ReturnType<typeof ajv.compile>>();
 
 type JSONRPCRequest = {
@@ -582,6 +582,25 @@ function splitJsonRpcRequests(raw: string): string[] {
  */
 function invalidRequest(id: JSONRPCRequest["id"], message: string, code = -32600): JSONRPCResponse {
   return { jsonrpc: "2.0", id, error: { code, message } };
+}
+
+/**
+ * Create a method-not-found JSON-RPC error response.
+ */
+function methodNotFound(
+  id: JSONRPCRequest["id"],
+  rawMethod: string,
+  normalizedMethod: string,
+): JSONRPCResponse {
+  return {
+    jsonrpc: "2.0",
+    id,
+    error: {
+      code: -32601,
+      message: "method not found",
+      data: { method: rawMethod, normalized: normalizedMethod },
+    },
+  };
 }
 
 /**
@@ -1153,6 +1172,11 @@ export function createServerFromManifest(options: RuntimeOptions = {}): RuntimeS
   const cwd = options.cwd ?? process.cwd();
   const { manifest } = loadManifest(cwd, options.config);
   const normalized = normalizeManifest(manifest);
+  const configuredMethods = normalized.mcp?.methods;
+  const resourcesTemplatesListEnabled = configuredMethods?.resourcesTemplatesList === true;
+  const completionCompleteEnabled = configuredMethods?.completionComplete === true;
+  const notificationsCompleteEnabled =
+    configuredMethods?.notificationsComplete ?? completionCompleteEnabled;
   let tools: DiscoveredTool[] = [];
   let resources: DiscoveredResource[] = [];
   let prompts: DiscoveredPrompt[] = [];
@@ -1620,17 +1644,21 @@ export function createServerFromManifest(options: RuntimeOptions = {}): RuntimeS
         const requestedVersion =
           params && typeof params.protocolVersion === "string" ? params.protocolVersion : undefined;
         const manifestVersion = (normalized as { protocolVersion?: string }).protocolVersion;
+        const capabilities: Record<string, unknown> = {
+          tools: { listChanged: true, list: true },
+          resources: { listChanged: false },
+          prompts: { listChanged: false },
+          logging: {},
+        };
+        if (completionCompleteEnabled) {
+          capabilities.completions = {};
+        }
         const result = {
           protocolVersion:
             typeof requestedVersion === "string" && requestedVersion.length > 0
               ? requestedVersion
               : (manifestVersion ?? DEFAULT_PROTOCOL_VERSION),
-          capabilities: {
-            tools: { listChanged: true, list: true },
-            resources: { listChanged: false },
-            prompts: { listChanged: false },
-            logging: {},
-          },
+          capabilities,
           serverInfo: {
             name: normalized.name,
             version: normalized.version,
@@ -1873,9 +1901,45 @@ export function createServerFromManifest(options: RuntimeOptions = {}): RuntimeS
         };
         return { response: { jsonrpc: "2.0", id: request.id ?? null, result }, notification };
       }
+      case "resources/templates/list": {
+        if (!resourcesTemplatesListEnabled) {
+          const rawMethod = request.method ?? "unknown";
+          const normalizedMethod = method ?? rawMethod;
+          return {
+            response: methodNotFound(request.id ?? null, rawMethod, normalizedMethod),
+            notification,
+          };
+        }
+        return {
+          response: {
+            jsonrpc: "2.0",
+            id: request.id ?? null,
+            result: { resourceTemplates: [] },
+          },
+          notification,
+        };
+      }
       case "resources/subscribe":
       case "resources/unsubscribe":
         return { response: { jsonrpc: "2.0", id: request.id ?? null, result: {} }, notification };
+      case "completion/complete": {
+        if (!completionCompleteEnabled) {
+          const rawMethod = request.method ?? "unknown";
+          const normalizedMethod = method ?? rawMethod;
+          return {
+            response: methodNotFound(request.id ?? null, rawMethod, normalizedMethod),
+            notification,
+          };
+        }
+        return {
+          response: {
+            jsonrpc: "2.0",
+            id: request.id ?? null,
+            result: { completion: { values: [], hasMore: false } },
+          },
+          notification,
+        };
+      }
       case "prompts/list": {
         const list = prompts.map((prompt) => ({
           name: prompt.name,
@@ -1923,6 +1987,18 @@ export function createServerFromManifest(options: RuntimeOptions = {}): RuntimeS
       }
       case "logging/setLevel":
         return { response: { jsonrpc: "2.0", id: request.id ?? null, result: {} }, notification };
+      case "notifications/complete":
+      case "notifications/completed": {
+        if (notificationsCompleteEnabled) {
+          return { response: undefined, notification: true };
+        }
+        const rawMethod = request.method ?? "unknown";
+        const normalizedMethod = method ?? rawMethod;
+        return {
+          response: methodNotFound(request.id ?? null, rawMethod, normalizedMethod),
+          notification,
+        };
+      }
       case "notifications/cancelled":
       case "notifications/canceled":
         return { response: undefined, notification: true };
@@ -1934,15 +2010,7 @@ export function createServerFromManifest(options: RuntimeOptions = {}): RuntimeS
           "error",
         );
         return {
-          response: {
-            jsonrpc: "2.0",
-            id: request.id ?? null,
-            error: {
-              code: -32601,
-              message: "method not found",
-              data: { method: rawMethod, normalized: normalizedMethod },
-            },
-          },
+          response: methodNotFound(request.id ?? null, rawMethod, normalizedMethod),
           notification,
         };
       }

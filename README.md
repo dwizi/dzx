@@ -123,7 +123,21 @@ DZX_SOCKET=/tmp/dzx.sock dzx dev
 If your MCP client expects a specific protocol version, set it in `mcp.json`:
 ```
 {
-  "protocolVersion": "2025-06-18"
+  "protocolVersion": "2025-11-25"
+}
+```
+
+### Optional MCP Methods
+You can opt in to additional MCP methods in `mcp.json`:
+```
+{
+  "mcp": {
+    "methods": {
+      "resourcesTemplatesList": true,
+      "completionComplete": true,
+      "notificationsComplete": true
+    }
+  }
 }
 ```
 
@@ -137,6 +151,9 @@ Supported methods:
 - `resources/list`, `resources/read`, `resources/subscribe`, `resources/unsubscribe`
 - `prompts/list`, `prompts/get`
 - `logging/setLevel`, `notifications/cancelled`, `notifications/canceled`
+- Optional: `resources/templates/list`
+- Optional: `completion/complete`
+- Optional: `notifications/complete`, `notifications/completed`
 
 Streaming:
 - Add `?stream=1` or `Accept: text/event-stream` to get SSE (`event: message`).

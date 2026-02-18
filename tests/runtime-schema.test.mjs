@@ -23,3 +23,15 @@ test("validateSchema accepts valid output", async () => {
   const result = validateSchema(schema, { slug: "ok" });
   assert.equal(result.ok, true);
 });
+
+test("validateSchema rejects non-strict schema definitions", async () => {
+  const schema = {
+    type: "object",
+    properties: { slug: { type: "string" } },
+    required: ["slug"],
+    unknownKeyword: true,
+  };
+  const result = validateSchema(schema, { slug: "ok" });
+  assert.equal(result.ok, false);
+  assert.match(result.error ?? "", /Invalid schema definition/i);
+});

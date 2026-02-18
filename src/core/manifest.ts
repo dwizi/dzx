@@ -10,6 +10,19 @@ const ManifestSchema = z
     runtime: z.enum(["node", "deno"], { message: "runtime must be node or deno" }),
     entry: z.string().min(1, "entry must not be empty"),
     protocolVersion: z.string().optional(),
+    mcp: z
+      .object({
+        methods: z
+          .object({
+            resourcesTemplatesList: z.boolean().optional(),
+            completionComplete: z.boolean().optional(),
+            notificationsComplete: z.boolean().optional(),
+          })
+          .strict()
+          .optional(),
+      })
+      .strict()
+      .optional(),
     toolsDir: z.string().optional(),
     resourcesDir: z.string().optional(),
     promptsDir: z.string().optional(),
