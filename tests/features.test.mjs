@@ -56,6 +56,19 @@ test("Initialize includes tools", async () => {
   assert.ok(tools.length > 0, "tools should be included on initialize");
 });
 
+test("Initialize defaults to latest protocol version", async () => {
+  const client = await createTestServer({ cwd });
+  const resp = await client.server.processRequest(
+    JSON.stringify({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "initialize",
+      params: {},
+    }),
+  );
+  assert.strictEqual(resp?.result?.protocolVersion, "2025-11-25");
+});
+
 test("Compatibility: dotted method names", async () => {
   const client = await createTestServer({ cwd });
   const resp = await client.server.processRequest(

@@ -26,7 +26,36 @@
     },
     "protocolVersion": {
       "type": "string",
+      "default": "2025-11-25",
       "description": "Optional MCP protocol version override for initialize."
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional MCP method feature flags.",
+      "properties": {
+        "methods": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "resourcesTemplatesList": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable resources/templates/list with an empty template list response."
+            },
+            "completionComplete": {
+              "type": "boolean",
+              "default": false,
+              "description": "Enable completion/complete with a deterministic empty completion response."
+            },
+            "notificationsComplete": {
+              "type": "boolean",
+              "default": false,
+              "description": "Accept notifications/complete as a no-op notification."
+            }
+          }
+        }
+      }
     },
     "toolsDir": {
       "type": "string",

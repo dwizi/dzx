@@ -28,6 +28,11 @@ dzx accepts both slash and dotted method names:
 - `logging/setLevel`
 - `notifications/cancelled`, `notifications/canceled`
 
+Optional methods (enable with `mcp.methods` in `mcp.json`):
+- `resources/templates/list`
+- `completion/complete`
+- `notifications/complete`, `notifications/completed`
+
 ## Calling tools
 
 Request:
